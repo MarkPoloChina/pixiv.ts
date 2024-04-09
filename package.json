@@ -1,6 +1,6 @@
 {
-  "name": "pixiv.ts",
-  "version": "0.5.9",
+  "name": "@markpolochina/pixiv.ts",
+  "version": "0.6.3",
   "description": "Wrapper for the Pixiv API with typings",
   "main": "dist/pixiv.js",
   "types": "dist/pixiv.d.ts",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Tenpi/pixiv.ts"
+    "url": "https://github.com/MarkPoloChina/pixiv.ts"
   },
   "keywords": [
     "pixiv",
@@ -22,7 +22,10 @@
     "anime",
     "art"
   ],
-  "author": "Tenpi",
+  "author": {
+    "email": "26239122xzw@gmail.com",
+    "name": "markpolochina"
+  },
   "license": "MIT",
   "devDependencies": {
     "@tenpi/tslint": "^1.0.5",
@@ -30,7 +33,6 @@
     "@types/chai": "^4.2.3",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.11.1",
-    "@types/unzipper": "^0.10.3",
     "chai": "^4.2.0",
     "dotenv": "^8.2.0",
     "mocha": "^6.2.2",
@@ -40,10 +42,6 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
-    "bing-translate-api": "^2.5.0",
-    "get-pixels": "^3.3.2",
-    "gif-encoder": "^0.7.2",
-    "image-size": "^0.8.3",
-    "unzipper": "^0.10.11"
+    "bing-translate-api": "^2.5.0"
   }
 }

@@ -9,27 +9,6 @@ export class Novel {
     constructor(private readonly api: api) {}
 
     /**
-     * Gets a novel by URL or ID.
-     */
-    public get = async (novelResolvable: string | number, params?: PixivParams) => {
-        let novelId = String(novelResolvable).match(/\d{8,}/) ? String(novelResolvable).match(/\d{8,}/)[0] : null
-        if (!novelId) {
-            if (!params) params = {}
-            params.word = String(novelResolvable)
-            let illusts = await this.search.illusts(params as PixivParams & {word: string})
-            Array.prototype.sort.call(illusts, ((a: PixivNovel, b: PixivNovel) => (a.total_bookmarks - b.total_bookmarks) * -1))
-            illusts = illusts.filter((i) => {
-                return (i.type === "novel") ? true : false
-            })
-            novelId = String(illusts[0].id)
-        }
-        const response = await this.detail({novel_id: Number(novelId)})
-        response.url = `https://www.pixiv.net/novel/show.php?id=${response.id}`
-        response.type = "novel"
-        return response
-    }
-
-    /**
      * Gets the details for a novel.
      */
     public detail = async (params: PixivParams & {novel_id: number}) => {

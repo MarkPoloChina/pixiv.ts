@@ -8,26 +8,6 @@ export class Manga {
     public constructor(private readonly api: api) {}
 
     /**
-     * Gets a manga by URL or ID.
-     */
-    public get = async (illustResolvable: string | number, params?: PixivParams) => {
-        let illustId = String(illustResolvable).match(/\d{8,}/) ? String(illustResolvable).match(/\d{8,}/)[0] : null
-        if (!illustId) {
-            if (!params) params = {}
-            params.word = String(illustResolvable)
-            let illusts = await this.search.illusts(params as PixivParams & {word: string})
-            Array.prototype.sort.call(illusts, ((a: PixivManga, b: PixivManga) => (a.total_bookmarks - b.total_bookmarks) * -1))
-            illusts = illusts.filter((i) => {
-                return (i.type === "manga") ? true : false
-            })
-            illustId = String(illusts[0].id)
-        }
-        const response = await this.detail({illust_id: Number(illustId)})
-        response.url = `https://www.pixiv.net/en/artworks/${response.id}`
-        return response
-    }
-
-    /**
      * Gets all of the pages in a manga.
      */
     public getPages = async (manga: PixivManga) => {

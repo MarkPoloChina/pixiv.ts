@@ -9,26 +9,6 @@ export class Illust {
     public constructor(protected readonly api: api) {}
 
     /**
-     * Gets an illust by either URL or ID.
-     */
-    public get = async (illustResolvable: string | number, params?: PixivParams) => {
-        let illustId = String(illustResolvable).match(/\d{8,}/) ? String(illustResolvable).match(/\d{8,}/)[0] : null
-        if (!illustId) {
-            if (!params) params = {}
-            params.word = String(illustResolvable)
-            let illusts = await this.search.illusts(params as PixivParams & {word: string})
-            Array.prototype.sort.call(illusts, ((a: PixivIllust, b: PixivIllust) => (a.total_bookmarks - b.total_bookmarks) * -1))
-            illusts = illusts.filter((i) => {
-                return (i.type === "illust" || i.type === "ugoira") ? true : false
-            })
-            illustId = String(illusts[0].id)
-        }
-        const response = await this.detail({illust_id: Number(illustId)})
-        response.url = `https://www.pixiv.net/en/artworks/${response.id}`
-        return response
-    }
-
-    /**
      * Gets the details for an illust.
      */
     public detail = async (params: PixivParams & {illust_id: number}) => {
@@ -163,5 +143,21 @@ export class Illust {
     public bookmarkRanges = async (params: PixivParams & {word: string}) => {
         const response = await this.api.get(`/v1/search/bookmark-ranges/illust`, params)
         return response as Promise<PixivBookmarkRanges>
+    }
+
+    /**
+     * To bookmark the illust.
+     */
+    public bookmarkIllust = async (params: PixivParams & {restrict: "public" | "private" | "all", illust_id: number}) => {
+        const response = await this.api.post(`/v2/illust/bookmark/add`, params)
+        return response as Promise<void>
+    }
+
+    /**
+     * Undo bookmark the illust.
+     */
+    public unbookmarkIllust = async (params: PixivParams & {illust_id: number}) => {
+        const response = await this.api.post(`/v1/illust/bookmark/delete`, params)
+        return response as Promise<void>
     }
 }

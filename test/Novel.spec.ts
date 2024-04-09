@@ -14,11 +14,6 @@ describe("Novel", async function() {
         await login()
     })
 
-    it("should get a novel", async function() {
-        const response = await pixiv.novel.get("https://www.pixiv.net/novel/show.php?id=11826198")
-        assert(response.hasOwnProperty("title"))
-    })
-
     it("should get novel text", async function() {
         const response = await pixiv.novel.text({novel_id: 11826198})
         assert(response.hasOwnProperty("novel_text"))

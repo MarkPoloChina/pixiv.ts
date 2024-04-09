@@ -2,7 +2,7 @@ import axios, {AxiosRequestConfig} from "axios"
 import * as crypto from "crypto"
 import {ParsedUrlQueryInput, stringify} from "querystring"
 import api from "./API"
-import {Illust, Manga, Novel, Search, Spotlight, Ugoira, User, Util, Web} from "./entities/index"
+import {Illust, Manga, Novel, Search, Spotlight, Ugoira, User, Web} from "./entities/index"
 import {PixivAPIResponse, PixivAuthData, PixivAuthHeaders} from "./types/index"
 
 const oauthURL = "https://oauth.secure.pixiv.net/auth/token"
@@ -45,7 +45,6 @@ export default class Pixiv {
     public search = new Search(this.api)
     public user = new User(this.api)
     public ugoira = new Ugoira(this.api)
-    public util = new Util(this.api)
     public spotlight = new Spotlight(this.api)
     public web = new Web(this.api)
 
@@ -66,51 +65,9 @@ export default class Pixiv {
         this.search = new Search(this.api)
         this.user = new User(this.api)
         this.ugoira = new Ugoira(this.api)
-        this.util = new Util(this.api)
         this.spotlight = new Spotlight(this.api)
         this.web = new Web(this.api)
         return Pixiv.refreshToken
-    }
-
-    /**
-     * Logs into Pixiv with your username and password, or refresh token if it is available.
-     */
-    public static login = async (username: string, password: string) => {
-        if (!username || !password) {
-            const missing = username ? "password" : (password ? "username" : "username and password")
-            return Promise.reject(`You must provide a ${missing} in order to login!`)
-        }
-        if (!Pixiv.refreshToken) {
-            data.username = username
-            data.password = password
-            data.grant_type = "password"
-        } else {
-            data.refresh_token = Pixiv.refreshToken
-            data.grant_type = "refresh_token"
-        }
-        const result = await axios.post(oauthURL, stringify(data as unknown as ParsedUrlQueryInput), {headers} as AxiosRequestConfig).then((r) => r.data) as PixivAPIResponse
-        Pixiv.accessToken = result.response.access_token
-        Pixiv.refreshToken = result.response.refresh_token
-        headers.authorization = `Bearer ${Pixiv.accessToken}`
-        return new Pixiv(Date.now(), result.response.expires_in)
-    }
-
-    /**
-     * Logs in with username and password only.
-     */
-    public static passwordLogin = async (username: string, password: string) => {
-        if (!username || !password) {
-            const missing = username ? "password" : (password ? "username" : "username and password")
-            return Promise.reject(`You must provide a ${missing} in order to login!`)
-        }
-        data.username = username
-        data.password = password
-        data.grant_type = "password"
-        const result = await axios.post(oauthURL, stringify(data as unknown as ParsedUrlQueryInput), {headers} as AxiosRequestConfig).then((r) => r.data) as PixivAPIResponse
-        Pixiv.accessToken = result.response.access_token
-        Pixiv.refreshToken = result.response.refresh_token
-        headers.authorization = `Bearer ${Pixiv.accessToken}`
-        return new Pixiv(Date.now(), result.response.expires_in)
     }
 
     /**
@@ -124,6 +81,13 @@ export default class Pixiv {
         Pixiv.refreshToken = result.response.refresh_token
         headers.authorization = `Bearer ${Pixiv.accessToken}`
         return new Pixiv(Date.now(), result.response.expires_in)
+    }
+
+    /**
+     * Set proxy for axios.
+     */
+    public static setProxy = (host: string, port: number) => {
+        axios.defaults.proxy = { host, port }
     }
 }
 

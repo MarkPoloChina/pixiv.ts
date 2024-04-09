@@ -7,11 +7,6 @@ describe("User", async function() {
         await login()
     })
 
-    it("should get a user", async function() {
-        const response = await pixiv.user.get("https://www.pixiv.net/member.php?id=35096162")
-        assert(response.hasOwnProperty("user"))
-    })
-
     it("should get a user bookmark", async function() {
         const response = await pixiv.user.bookmarkDetail({illust_id: 73346537})
         assert(response.hasOwnProperty("bookmark_detail"))
